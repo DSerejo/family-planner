@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from .controllers.user_controller import router as user_router
 
 app = FastAPI()
 
@@ -11,7 +12,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(user_router)
 
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
