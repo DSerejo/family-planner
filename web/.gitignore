@@ -1,0 +1,33 @@
+# Node modules
+node_modules/
+
+# Svelte build files
+public/build/
+
+# Rollup cache
+.rollup.cache/
+
+# SvelteKit build files
+.svelte-kit/
+
+# Temporary files
+*.tmp
+*.log
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# MacOS specific files
+.DS_Store
+
+# Linux specific files
+*.swp
+
+# Windows specific files
+Thumbs.db
