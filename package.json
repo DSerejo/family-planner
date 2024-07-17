@@ -1,0 +1,21 @@
+{
+  "scripts": {
+    "start:web": "cd web; dotenv -- cross-var npm run dev -- --mode dev --host --port %WEB_PORT%",
+    "start:api": " export $(grep -v '^#' .env | xargs) && cd api; dotenv -- cross-var uvicorn app.main:app --host 0.0.0.0 --port %API_PORT% --reload",
+    "start:db": "docker compose up",
+    "start": "npm run start:web & npm run start:api & npm run start:db",
+    "source_env": "vite dev"
+  },
+  "name": "family-planner",
+  "version": "1.0.0",
+  "description": "## Overview The Family Planner and Tracker App is designed to help families coordinate and track their weekly activities. The app consists of a backend API and a frontend web application.",
+  "author": "dennyserejom@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "cross-var": "^1.1.0",
+    "dotenv-cli": "^7.4.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

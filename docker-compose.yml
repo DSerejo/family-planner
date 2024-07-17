@@ -1,37 +1,37 @@
 version: '3.8'
 
 services:
-  web:
-    image: node:18
-    volumes:
-      - ./web:/app
-    working_dir: /app
-    ports:
-      - "${WEB_PORT}:5173"
-      - "35729:35729"
-    command: "npm run dev -- --host"
+  # web:
+  #   image: node:18
+  #   volumes:
+  #     - ./web:/app
+  #   working_dir: /app
+  #   ports:
+  #     - "${WEB_PORT}:5173"
+  #     - "35729:35729"
+  #   command: "npm run dev -- --host"
 
-  api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    volumes:
-      - ./api:/app
-      - /app/venv
-    ports:
-      - "${API_PORT}:8000"
-    environment:
-      - MYSQL_HOST=${MYSQL_HOST}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DB=${MYSQL_DATABASE}
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - API_KEY=${API_KEY}
-    depends_on:
-      - db
+  # api:
+  #   build:
+  #     context: ./api
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./api:/app
+  #     - /app/venv
+  #   ports:
+  #     - "${API_PORT}:8000"
+  #   environment:
+  #     - MYSQL_HOST=${MYSQL_HOST}
+  #     - MYSQL_USER=${MYSQL_USER}
+  #     - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+  #     - MYSQL_DB=${MYSQL_DATABASE}
+  #     - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+  #     - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+  #     - API_KEY=${API_KEY}
+  #   depends_on:
+  #     - db
 
-    command: "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+  #   command: "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
   db:
     image: mysql:8
@@ -42,13 +42,15 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - db_data:/var/lib/mysql
+    ports:
+      - "${DB_PORT}:3306"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
       - "${DB_ADMIN_PORT}:80"
     environment:
-      - PMA_HOST=${MYSQL_HOST}
+      - PMA_HOST=db
       - PMA_USER=${MYSQL_USER}
       - PMA_PASSWORD=${MYSQL_PASSWORD}
 

@@ -12,7 +12,8 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"deploy": "npm run build -- --mode staging && gcloud app deploy build/app.yaml --verbosity=debug"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -32,6 +33,7 @@
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.2.3",
 		"svelte": "^4.2.18",
+		"svelte-adapter-appengine": "^1.1.0",
 		"svelte-check": "^3.6.0",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",

@@ -1,26 +1,23 @@
 from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel
-from typing import Optional
 from app.utils.helper_functions import validate_api_key
-# from sqlalchemy.orm import Session
-# from app.database import get_db
-# from app.models.user import User
-# from app.schemas.user_schema import UserCreate
-# from app.services.user_service import create_user, get_user_by_email
-import os
+from app.schemas.user_schema import UserCreate
+from app.services.user_service import create_user, get_user_by_email
+from app.database import get_db
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
-class Body(BaseModel):
-    email: str
-
-
-
 @router.post("/auth/google")
-def google_login(body: Body, a: str = Depends(validate_api_key)):
+def google_login(
+    body: UserCreate, 
+    a: str = Depends(validate_api_key), 
+    db: Session = Depends(get_db)
+):
     try:
-        
-        return {"success": True, "user": body.email}
+        user = get_user_by_email(db,body.email)
+        if not user:
+            user = create_user(db, body)
+        return {"success": True, "user": user}
     except ValueError as e:
         print(e)
         raise HTTPException(status_code=400, detail="Invalid token")
