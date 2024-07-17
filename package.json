@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start:web": "cd web; dotenv -- cross-var npm run dev -- --mode dev --host --port %WEB_PORT%",
-    "start:api": " export $(grep -v '^#' .env | xargs) && cd api; dotenv -- cross-var uvicorn app.main:app --host 0.0.0.0 --port %API_PORT% --reload",
+    "start:api": " export $(grep -v '^#' .env | xargs) && cd api; dotenv -- cross-var uvicorn main:app --host 0.0.0.0 --port %API_PORT% --reload",
     "start:db": "docker compose up",
     "start": "npm run start:web & npm run start:api & npm run start:db",
     "source_env": "vite dev"
