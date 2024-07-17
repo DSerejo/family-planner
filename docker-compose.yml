@@ -53,6 +53,14 @@ services:
       - PMA_HOST=db
       - PMA_USER=${MYSQL_USER}
       - PMA_PASSWORD=${MYSQL_PASSWORD}
+  phpmyadmindev:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=35.212.163.253
+      - PMA_USER=root
+      - PMA_PASSWORD=root
 
 volumes:
   db_data:
