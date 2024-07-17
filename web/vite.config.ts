@@ -10,6 +10,8 @@ export default defineConfig({
 		origin: 'https://family-planner.local'
 	},
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+		environment: 'jsdom',
+		globals: true
 	}
 });
