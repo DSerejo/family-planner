@@ -1,6 +1,4 @@
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 import sys
 import os
 
@@ -14,20 +12,6 @@ from app.services.user_service import get_user_by_email, create_user
 from app.database import Base
 
 
-# Setup the test database
-DATABASE_URL = "sqlite:///:memory:"
-engine = create_engine(DATABASE_URL)
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-@pytest.fixture(scope="module")
-def db():
-    Base.metadata.create_all(bind=engine)
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-        Base.metadata.drop_all(bind=engine)
 
 def test_get_user_by_email(db):
     # Create a user
@@ -44,11 +28,10 @@ def test_get_user_by_email(db):
     assert fetched_user.name == "Test User"
 
 def test_create_user(db):
-    # Create a user schema
     user_create = UserCreate(email="newuser@example.com", name="New User")
-
-    # Test create_user
     created_user = create_user(db, user_create)
     assert created_user is not None
     assert created_user.email == "newuser@example.com"
     assert created_user.name == "New User"
+
+   

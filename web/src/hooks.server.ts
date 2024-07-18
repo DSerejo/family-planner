@@ -16,8 +16,5 @@ setEnvDefaults({
 }, config)
 const {handle: authInitHandle} = SvelteKitAuth(config);
 
-console.log(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, AUTH_TRUST_HOST)
-
-
 
 export const handle = sequence(authInitHandle, AuthHandle);

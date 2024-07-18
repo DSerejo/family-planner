@@ -67,3 +67,5 @@ def test_google_login_invalid_token():
     response = client.post("/auth/google", json={"email": "invalid@example.com", "name": "Invalid User"})
     assert response.status_code == 401
     assert response.json() == {"detail": "Unauthorized"}
+
+

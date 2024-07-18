@@ -16,9 +16,11 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-#from app.da import Base
-#target_metadata = Base.metadata
-target_metadata = None
+from app.database import Base
+target_metadata = Base.metadata
+
+from app.models import Family, FamilyMember, User
+# target_metadata = None
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -66,7 +68,7 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection, target_metadata=target_metadata, compare_type=True
         )
 
         with context.begin_transaction():
