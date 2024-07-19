@@ -1,22 +1,23 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.utils.helper_functions import validate_api_key
 from app.schemas.user_schema import UserCreate
-from app.services.user_service import create_user, get_user_by_email
+from app.services.user_service import UserService, create_user_service
 from app.database import get_db
 from sqlalchemy.orm import Session
 
 router = APIRouter()
 
-@router.post("/auth/google")
-def google_login(
+@router.post("/user")
+def create_user_with_google(
     body: UserCreate, 
-    a: str = Depends(validate_api_key), 
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    service: UserService = Depends(create_user_service),
+    validate_api_key: bool = Depends(validate_api_key)
 ):
     try:
-        user = get_user_by_email(db,body.email)
+        user = service.get_user_by_email(body.email)
         if not user:
-            user = create_user(db, body)
+            user = service.create_user(body)
         return {"success": True, "user": user}
     except ValueError as e:
         print(e)

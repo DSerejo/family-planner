@@ -12,7 +12,7 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest",
+		"test:unit": "vitest --mode dev",
 		"deploy": "npm run build -- --mode staging && gcloud app deploy build/app.yaml --verbosity=debug"
 	},
 	"devDependencies": {

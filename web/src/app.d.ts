@@ -1,5 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
+import type { ApiSession } from "$lib/server/auth/auth.interface";
 import type { Session } from "@auth/sveltekit";
 
 // for information about these interfaces
@@ -7,7 +8,8 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			requestId: string;
+			session: () => Promise<ApiSession | undefined>
+			family?: Family[]
 		}
 		interface PageData {
 			googleSession: Session

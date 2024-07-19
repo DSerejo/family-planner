@@ -1,5 +1,7 @@
 <script lang="ts">
-    import {signIn, signOut} from "@auth/sveltekit/client"
+    import type {PageData} from "./$types"
+    import {signIn} from "@auth/sveltekit/client"
+    import {signOut} from "$lib/auth/auth.client"
     export let data: PageData;
   </script>
 

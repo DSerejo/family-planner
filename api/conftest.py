@@ -3,7 +3,7 @@ import pytest
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from app.database import Base
-from app.models import Family, FamilyMember
+from app.models import Family, FamilyMember, User, Session
 import sys
 
 def pytest_configure(config):
@@ -34,7 +34,7 @@ def db():
 
 @pytest.fixture(autouse=True)
 def clean_db(db):
-    tables = [Family.__tablename__, FamilyMember.__tablename__]
+    tables = [Family.__tablename__, FamilyMember.__tablename__, User.__tablename__, Session.__tablename__]
     for table in tables:
         try:
             db.execute(text(f'delete from {table}'))

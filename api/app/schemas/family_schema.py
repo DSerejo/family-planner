@@ -1,9 +1,15 @@
 from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 
-class FamilyCreate(BaseModel):
+class FamilyCreateBody(BaseModel):
     name: str
 
+class FamilyCreate(BaseModel):
+    name: str
+    owner_id: str
+
+class FamilyUpdate(BaseModel):
+    name: str
 class FamilyMemberAdd(BaseModel):
     email: EmailStr
     name: str

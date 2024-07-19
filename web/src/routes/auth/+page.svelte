@@ -1,15 +1,10 @@
-<script>
-	import { page } from '$app/stores';
-	import { get } from 'svelte/store';
+<script lang="ts">
   import { onMount } from 'svelte';
-  let data
-	const pageStore = get(page);
+	import type { PageData } from './$types';
+  let data: PageData
 	onMount(async () => {
-		data = await fetch('http://localhost:6051')
-			.then((response) => response.json())
-			.then((d) => JSON.stringify(d))
-			.catch((error) => console.error('error', error));
-		console.log(data);
+		
+		
 	});
 </script>
 
