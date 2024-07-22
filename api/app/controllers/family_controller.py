@@ -7,10 +7,12 @@ from app.utils.session_validate import validate_session
 router = APIRouter()
 
 @router.get("/family/{family_id}")
-def get_family(family_id: int, family_service: FamilyService = Depends(create_family_service)):
+def get_family(family_id: str, family_service: FamilyService = Depends(create_family_service)):
     family = family_service.get_family_by_id(family_id)
     if not family:
         raise HTTPException(status_code=404, detail="Family not found")
+    family.populate_members()
+    del family.members
     return family
 
 @router.post("/family")
@@ -18,6 +20,7 @@ def create_family(familyBody: FamilyCreateBody,
                   family_service: FamilyService = Depends(create_family_service),
                   session: Session = Depends(validate_session)):
     family = FamilyCreate(name=familyBody.name, owner_id=session.user_id)
+    
     return family_service.create_family(family)
 
 @router.delete("/family/{family_id}")

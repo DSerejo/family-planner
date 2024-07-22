@@ -11,6 +11,9 @@ class FamilyMemberService:
         self.user_service = user_service
         self.family_service = family_service
 
+    def setFamilyService(self, family_service: FamilyService):
+        self.family_service = family_service
+        
     def create_family_member(self, family_member: FamilyMemberCreate):
         db_family = self.family_service.get_family_by_id(family_member.family_id)
         if not db_family:

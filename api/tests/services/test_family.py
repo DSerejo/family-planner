@@ -10,9 +10,11 @@ from app.schemas.family_schema import FamilyCreate, FamilyUpdate
 from app.services.family_service import FamilyService
 from app.models.family import Family
 from app.models.user import User
+from app.services.user_service import UserService
+from app.services.family_member_service import FamilyMemberService
 
 def create_family(db, user_id, family_id):
-    user = create_user(db, user_id)
+    create_user(db, user_id)
     family = Family(id=family_id, name="Test Family", owner_id=user_id)
     db.add(family)
     db.commit()
@@ -28,7 +30,11 @@ def create_user(db, user_id):
 
 @pytest.fixture()
 def family_service(db):
-    return FamilyService(db)
+    user_service = UserService(db)
+    family_service = FamilyService(db, None)  
+    family_member_service = FamilyMemberService(db, user_service, family_service)
+    family_service.setFamilyMemberService(family_member_service)
+    return family_service
 
 def test_create_family(db, family_service):
     user = create_user(db, "1234567890")

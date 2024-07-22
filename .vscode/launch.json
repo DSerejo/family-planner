@@ -27,8 +27,7 @@
             "name": "Test api",
             "type": "python",
             "request": "launch",
-            "module": "pytest_watch",
-            
+            "module": "pytest",
             "cwd": "${workspaceFolder}/api",
             
         },

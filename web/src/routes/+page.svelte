@@ -2,6 +2,12 @@
     import type {PageData} from "./$types"
     import {signIn} from "@auth/sveltekit/client"
     import {signOut} from "$lib/auth/auth.client"
+	import { goto } from "$app/navigation";
+
+
+    const goToFamily = () => {
+        goto("/family")
+    }
     export let data: PageData;
   </script>
 
@@ -15,6 +21,7 @@
             <strong>{data.googleSession.user?.name ?? "User"}</strong>
         </span>
         <button on:click={() => signOut()} class="button">Sign out</button>
+        <button on:click={() => goToFamily()} class="button">Family</button>
     {:else}
         <span>You are not signed in</span>
         <button on:click={() => signIn("google")}>

@@ -21,8 +21,10 @@ from app.schemas.family_member_schema import FamilyMemberCreate
 @pytest.fixture(scope="module")
 def family_member_service(db):
     user_service = UserService(db)
-    family_service = FamilyService(db)  
-    return FamilyMemberService(db, user_service, family_service)
+    family_service = FamilyService(db, None)  
+    family_member_service = FamilyMemberService(db, user_service, family_service)
+    family_service.setFamilyMemberService(family_member_service)
+    return family_member_service
 
 def create_family(db, id, name="Test Family"):
     family = Family(id=id,name=name)

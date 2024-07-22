@@ -16,10 +16,19 @@ def pytest_configure(config):
 
 # Setup the test database
 DATABASE_URL = "sqlite:///:memory:"
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, connect_args={'check_same_thread': False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
+def get_db():
+    Base.metadata.create_all(bind=engine)
+    db = TestingSessionLocal()
+    try:
+        yield db
+
+    finally:
+        db.close()
+        Base.metadata.drop_all(bind=engine)
 
 @pytest.fixture(scope="session", autouse=True)
 def db():
