@@ -12,7 +12,8 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest --mode dev",
+		"test:unit:watch": "vitest --mode dev",
+		"test:unit": "vitest",
 		"deploy": "npm run build -- --mode staging && gcloud app deploy build/app.yaml --verbosity=debug"
 	},
 	"devDependencies": {
@@ -44,6 +45,7 @@
 	"type": "module",
 	"dependencies": {
 		"@auth/core": "^0.34.1",
-		"@auth/sveltekit": "^1.4.1"
+		"@auth/sveltekit": "^1.4.1",
+		"graphql": "^16.9.0"
 	}
 }

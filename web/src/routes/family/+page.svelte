@@ -19,9 +19,9 @@
 
 {#if data?.googleSession}
 	<div>Family</div>
-	{#if data?.family?.length}
+	{#if data?.families?.length}
 		<div>
-			{#each data.family as family}
+			{#each data.families as family}
 				<div>{family.name}</div>
 			{/each}
 		</div>

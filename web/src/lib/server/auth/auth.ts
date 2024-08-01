@@ -1,8 +1,9 @@
 import type { Handle, RequestEvent } from '@sveltejs/kit';
-import { api } from '../api';
+import { api } from '../api/api';
 import type { ApiSession } from './auth.interface';
 import type { Session } from '@auth/sveltekit';
 import type { ApiUser } from '$lib/user.interface';
+import { API_KEY } from '$env/static/private';
 
 export const AuthHandle: Handle = async ({ event, resolve }) => {
 	event.locals.session = resolveSession(event);
@@ -67,12 +68,12 @@ function getFromCookies(event: RequestEvent): ApiSession | undefined {
 }
 
 const createUserWithGoogleSession = (googleSession: Session) => {
-	return api.post<ApiUser>('/user', { ...googleSession.user });
+	return api.post<ApiUser>('/user', { ...googleSession.user }, { headers: { 'Authorization': `Bearer ${API_KEY}` } });
 };
 
 async function createSession(googleSession: Session): Promise<ApiSession | undefined> {
 	try {
-		return await api.post<ApiSession>('/session', { ...googleSession.user });
+		return await api.post<ApiSession>('/session', { ...googleSession.user }, { headers: { 'Authorization': `Bearer ${API_KEY}` } });
 	} catch (error: any) {
 		if (error.status === 401) {
 			return createUserWithGoogleSession(googleSession).then(() => {

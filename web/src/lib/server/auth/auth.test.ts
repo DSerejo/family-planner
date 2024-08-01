@@ -1,8 +1,8 @@
 import { AuthHandle } from './auth';
 import { describe, it, expect, vi, type Mock } from 'vitest';
-import { api } from '../api';
+import { api } from '../api/api';
 
-vi.mock('../api', () => ({
+vi.mock('../api/api', () => ({
   api: {
     post: vi.fn()
   }
@@ -49,7 +49,7 @@ describe('AuthHandle', () => {
     AuthHandle({ event: mockEvent, resolve: mockResolve });
     await mockEvent.locals.session()
     expect(mockEvent.locals.auth).toHaveBeenCalled();
-    expect(POST).toHaveBeenCalledWith('/session', { email: 'testUser' });
+    expect(POST).toHaveBeenCalledWith('/session', { email: 'testUser' }, expect.anything());
     expect(mockEvent.cookies.set).toHaveBeenCalledWith('session', expect.any(String), expect.any(Object));
     expect(mockResolve).toHaveBeenCalledWith(mockEvent);
   });
@@ -76,9 +76,9 @@ describe('AuthHandle', () => {
     AuthHandle({ event: mockEvent, resolve: mockResolve });
     await mockEvent.locals.session()
     expect(mockEvent.locals.auth).toHaveBeenCalled();
-    expect(POST).toHaveBeenCalledWith('/session', { email: 'testUser', name: 'testUser' });
-    expect(POST).toHaveBeenCalledWith('/user', { email: 'testUser', name: 'testUser' });
-    expect(POST).toHaveBeenCalledWith('/session', { email: 'testUser', name: 'testUser' });
+    expect(POST).toHaveBeenCalledWith('/session', { email: 'testUser', name: 'testUser' }, expect.anything());
+    expect(POST).toHaveBeenCalledWith('/user', { email: 'testUser', name: 'testUser' }, expect.anything());
+    expect(POST).toHaveBeenCalledWith('/session', { email: 'testUser', name: 'testUser' }, expect.anything());
     expect(mockEvent.cookies.set).toHaveBeenCalledWith('session', expect.any(String), expect.any(Object));
     expect(mockResolve).toHaveBeenCalledWith(mockEvent);
   });

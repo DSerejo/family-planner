@@ -41,7 +41,7 @@ describe("Family page", () => {
     it("should show list of families for the user to select if user has any family", () => {
         const { getByText } = render(FamilyPage, {
             data: {
-                family: [{id: '1', name: "Family 1"}, {id: '2', name: "Family 2"}],
+                families: [{id: '1', name: "Family 1"}, {id: '2', name: "Family 2"}],
                 session: {
                     user: {
                         email: "test@test.com"

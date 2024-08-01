@@ -1,7 +1,11 @@
 import { API_KEY } from '$env/static/private';
+const API_URL = "https://api.family-planner.local.com"
 
-const API_URL = process.env.API_URL;
+let token: string | null = null
 
+export const setToken = (t: string) => {
+	token = t
+}
 export const fetchApi = async (
 	url: string,
 	options: RequestInit,
@@ -22,9 +26,9 @@ export const fetchApi = async (
 		process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 	}
 	options.headers = {
-		...(options.headers || {}),
-		Authorization: `Bearer ${API_KEY}`,
-		'Content-Type': 'application/json'
+		Authorization: `Bearer ${token}`,
+		'Content-Type': 'application/json',
+		...(options.headers || {})
 	};
 	const response = await fetch(url, options);
 	const json = await response.json();
@@ -41,8 +45,8 @@ export type Body = Record<string, any>;
 export type Params = Record<string, string>;
 
 export type Api = {
-	post: <R = unknown, T extends Body = Body>(url: string, body: T) => Promise<R>;
-	put: <R = unknown, T extends Body = Body>(url: string, body: T) => Promise<R>;
+	post: <R = unknown, T extends Body = Body>(url: string, body: T, options?: RequestInit) => Promise<R>;
+	put: <R = unknown, T extends Body = Body>(url: string, body: T, options?: RequestInit) => Promise<R>;
 	get: <R = unknown, T extends Params = Params>(
 		url: string,
 		params?: T,
@@ -55,9 +59,9 @@ export type Api = {
 	) => Promise<R>;
 };
 
-export const api: Api = {
-	post: async (url, body) => fetchApi(url, { method: 'POST', body: JSON.stringify(body) }),
-	put: async (url, body) => fetchApi(url, { method: 'PUT', body: JSON.stringify(body) }),
+export const api: Api = {	
+	post: async (url, body, options) => fetchApi(url, { method: 'POST', body: JSON.stringify(body), ...options }),
+	put: async (url, body, options) => fetchApi(url, { method: 'PUT', body: JSON.stringify(body), ...options }),
 	get: async (url, params, options) => fetchApi(url, { method: 'GET', ...options }, params),
 	delete: async (url, params, options) => fetchApi(url, { method: 'DELETE', ...options }, params)
 };

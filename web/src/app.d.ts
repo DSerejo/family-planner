@@ -9,7 +9,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			session: () => Promise<ApiSession | undefined>
-			family?: Family[]
+			families?: Family[]
 		}
 		interface PageData {
 			googleSession: Session

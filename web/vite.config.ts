@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 
 export default ({mode}: {mode: string}) => {
-	const env = loadEnv(mode, process.cwd());
+	console.log(process.env.API_URL)
 	return defineConfig({
 		plugins: [sveltekit()],
 		server: {
