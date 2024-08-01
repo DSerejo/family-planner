@@ -1,8 +1,0 @@
-{
-    "typescript.tsdk": "./web/node_modules/typescript/lib",
-    "[svelte]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "svelte.enable-ts-plugin": true,
-    "svelte.ask-to-enable-ts-plugin": true
-}
