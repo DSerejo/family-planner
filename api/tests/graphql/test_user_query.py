@@ -103,3 +103,26 @@ def test_user_query(client, db):
     assert respUser["sessions"] == [{"id": "1"}]
     assert respUser["families"][0] == {"id": "1", "name": "Test Family"}
     assert respUser["families"][1] == {"id": "2", "name": "Test Family 2"}
+
+def test_user_query_with_family_filter(client, db):
+    u, session = create_test_data(db)
+
+    query = """
+    query GetUser($email: String!, $familyId: ID!) {
+        user(email: $email) {
+            families(where: {id: $familyId}) {
+                id,
+                name
+            }
+        }
+    }
+    """
+
+    variables = {"email": "test@example.com", "familyId": "2"}
+    response = client.post("/graphql", 
+                           json={"query": query, "variables": variables}, 
+                           headers={f"Authorization": f"Bearer {session.id}"})
+    assert response.status_code == 200
+    data =  response.json()["data"]
+    assert len(data["user"]["families"]) == 1
+    assert data["user"]["families"][0]["id"] == "2"

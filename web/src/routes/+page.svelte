@@ -4,7 +4,6 @@
     import {signOut} from "$lib/auth/auth.client"
 	import { goto } from "$app/navigation";
 
-
     const goToFamily = () => {
         goto("/family")
     }

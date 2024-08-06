@@ -8,7 +8,7 @@ class Family(Base):
     id = Column(String(36), primary_key=True)
     owner_id = Column(String(36), ForeignKey('users.id'))
     name = Column(String(255), index=True)
-    members = relationship("FamilyMember", backref='family',   cascade='all, delete')
+    members = relationship("FamilyMember", backref='family', lazy='select', cascade='all, delete')
     family_members = None
 
     def populate_members(self):

@@ -3,6 +3,8 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "test": "poetry run pytest"
+        "test": "ENV=testing poetry run pytest",
+        "test:watch": "ENV=testing poetry run ptw",
+        "dev": "ENV=development poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 6051"
     }
 }

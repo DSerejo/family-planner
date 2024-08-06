@@ -1,71 +1,67 @@
 
 
 import pytest
-# from fastapi.testclient import TestClient
-# from fastapi import FastAPI, HTTPException, Header
-# import mock
+from fastapi.testclient import TestClient
+from fastapi import FastAPI, HTTPException, Header
+import mock
 
-# import sys
-# import os
+import sys
+import os
 
-# # Add the root directory to the Python path
-# sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# Add the root directory to the Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-# from app.controllers.family_controller import router, validate_api_key
-# from app.schemas.family_schema import FamilyCreate, FamilyMemberAdd
-# from app.database import get_db
+from app.controllers.family_member_controller import router, validate_session
+from app.schemas.family_member_schema import  FamilyMemberCreate
+from app.services.family_member_service import create_family_member_service
+from app.database import get_db
 
-# # Mock dependencies
-# def mock_validate_api_key(authorization: str | None = Header(None)):
-#     if authorization != f"Bearer mock_api_key":
-#         raise HTTPException(status_code=401, detail="Unauthorized")
+# Mock dependencies
+def mock_validate_session(authorization: str | None = Header(None)):
+    if authorization != f"Bearer token":
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+def mock_family_member_service():
+    class FamilyMemberService:
+        def create_family_member(self, member: FamilyMemberCreate):
+            return {**member.model_dump(), "id": 1}
+        
+        def remove_family_member(self, member_id: int):
+            return True
+        
+    return FamilyMemberService()
 
-# def mock_get_family_by_id(db, family_id: int):
-#     if family_id == 1:
-#         return {"id": family_id, "name": "Existing Family"}
-#     return None
 
-# def mock_add_family_member(db, family_id: int, member: FamilyMemberAdd):
-#     if family_id == 1:
-#         return {"id": family_id, "members": [{"email": member.email, "name": member.name}]}
-#     return None
 
-# def mock_remove_family_member(db, family_id: int, member_email: str):
-#     if family_id == 1 and member_email == "member@example.com":
-#         return {"id": family_id, "members": []}
-#     return None
 
-# @pytest.fixture(autouse=True)
-# def patch_get_family_by_id():
-#     with mock.patch('app.controllers.family_controller.get_family_by_id', wraps=mock_get_family_by_id) as mock_function:
-#         yield mock_function
+def mock_get_db():
+    pass
 
-# @pytest.fixture(autouse=True)
-# def patch_add_family_member():
-#     with mock.patch('app.controllers.family_controller.add_family_member', wraps=mock_add_family_member) as mock_function:
-#         yield mock_function
+# Apply mocks
+app = FastAPI()
+app.include_router(router)
+app.dependency_overrides[validate_session] = mock_validate_session
+app.dependency_overrides[get_db] = mock_get_db
+app.dependency_overrides[create_family_member_service] = mock_family_member_service
 
-# @pytest.fixture(autouse=True)
-# def patch_remove_family_member():
-#     with mock.patch('app.controllers.family_controller.remove_family_member', wraps=mock_remove_family_member) as mock_function:
-#         yield mock_function
-
-# def mock_get_db():
-#     pass
-
-# # Apply mocks
-# app = FastAPI()
-# app.include_router(router)
-# app.dependency_overrides[validate_api_key] = mock_validate_api_key
-# app.dependency_overrides[get_db] = mock_get_db
-
-# client = TestClient(app)
+client = TestClient(app)
+def test_add_family_member_with_no_session():
+    response = client.post("/family/1/member", json={"email": "newmember@example.com", "name": "New Member"})
+    assert response.status_code == 401
+    assert response.json() == {"detail": "Unauthorized"}
 
 def test_add_family_member():
-    pass
-    # response = client.post("/family/1/members", json={"email": "newmember@example.com", "name": "New Member"}, headers={"Authorization": "Bearer mock_api_key"})
-    # assert response.status_code == 200
-    # assert response.json() == {"id": 1, "members": [{"email": "newmember@example.com", "name": "New Member"}]}
+    response = client.post("/family/1/member", json={"email": "newmember@example.com", "name": "New Member"}, headers={"Authorization": "Bearer token"})
+    assert response.status_code == 200
+    resp =  response.json()
+    assert resp["name"] == "New Member"
+    assert resp["email"] == "newmember@example.com"
+    assert resp["family_id"] == '1'
+
+def test_delete_family_member():
+    response = client.delete("/family/1/member/1", headers={"Authorization": "Bearer token"})
+    assert response.status_code == 200
+    assert response.json() == {"success": True, "message": "Family member deleted"}
 
 # def test_remove_family_member():
 #     response = client.delete("/family/1/members/member@example.com", headers={"Authorization": "Bearer mock_api_key"})

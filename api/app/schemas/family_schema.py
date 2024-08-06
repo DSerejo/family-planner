@@ -20,3 +20,6 @@ class FamilyInvite(BaseModel):
 class FamilyInviteResponse(BaseModel):
     success: bool
     message: str
+
+class FamilyFilter(BaseModel):
+    id: Optional[str] = None

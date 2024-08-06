@@ -12,6 +12,6 @@ if [ "$stage" == "staging" ]; then  # Updated comparison operator
     eval $cmd
 else
     export $(grep -v '^#' $env_file | xargs)
-    alembic upgrade head
+    poetry run alembic upgrade head
 fi
 

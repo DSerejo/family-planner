@@ -1,3 +1,5 @@
+
+
 import os
 import pytest
 from sqlalchemy import create_engine, text
@@ -8,6 +10,7 @@ import sys
 
 def pytest_configure(config):
     os.environ['ENV'] = 'testing'
+    
 
 # import logging
 # logging.basicConfig()

@@ -14,14 +14,16 @@ from app.models.user import User
 from app.services.user_service import create_user_service
 from app.utils.helper_functions import validate_session
 from app.models.session import Session as SessionModel
-
+from app.services.family_service import FamilyService, create_family_service
 def get_context(db: Session = Depends(get_db), 
                 user_service: UserService = Depends(create_user_service),
+                family_service: FamilyService = Depends(create_family_service),
                 validate_session: SessionModel = Depends(validate_session)) -> Coroutine[Any, Any, Any]:
     print (db.query(User).all())
     return {
             "db": db, 
             "user_service": user_service,
+            "family_service": family_service,
             "session": validate_session
             }
 

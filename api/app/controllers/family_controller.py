@@ -23,6 +23,8 @@ def create_family(familyBody: FamilyCreateBody,
     
     return family_service.create_family(family)
 
+
+
 @router.delete("/family/{family_id}")
 def delete_family(family_id: str, 
                   family_service: FamilyService = Depends(create_family_service),

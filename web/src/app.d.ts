@@ -10,6 +10,8 @@ declare global {
 		interface Locals {
 			session: () => Promise<ApiSession | undefined>
 			families?: Family[]
+			mappedFamilies?: { [key: string]: Family }
+			error?: string
 		}
 		interface PageData {
 			googleSession: Session

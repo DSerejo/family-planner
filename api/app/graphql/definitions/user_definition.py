@@ -17,6 +17,10 @@ class Session:
         )
 
 
+@strawberry.input
+class FamilyFilter:
+    id: Optional[strawberry.ID] = None
+
 @strawberry.type
 class User:
     email: Optional[str]
@@ -25,8 +29,8 @@ class User:
     model: strawberry.Private[UserModel]
 
     @strawberry.field(graphql_type=List["Family"])
-    def families(self, info: strawberry.Info) -> List[Family]:
-        families = self.model.families
+    def families(self, info: strawberry.Info, where: Optional[FamilyFilter] = None) -> List[Family]:
+        families = self.model.listFamilies(db=info.context["db"], where=where)
         return [Family.from_instance(family) for family in families]
     
     @strawberry.field

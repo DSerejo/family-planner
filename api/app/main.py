@@ -1,9 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from .routes import setRoutes
 from strawberry.asgi import GraphQL
 from .graphql import schema
-
+from .middlewares import add_middlewares
+from .database import get_db
 app = FastAPI()
 
 # Add CORS middleware
@@ -15,6 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+add_middlewares(app)
 setRoutes(app)
 
 @app.get("/")
